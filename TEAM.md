@@ -30,7 +30,7 @@ Gợi ý chia vai:
 | Võ Trần Công | single | `983d506`, `14188e7` | `src/tests/test_single_extra.py` |
 | Từ Huy Bảo | orchestrator + handoff | `6200002`, `b8a557c` | `src/tests/test_orchestrator_extra.py` |
 | Nguyễn Đức Khương Lam | Workflow + integration | `4ee050a`, `4db00d5` | `src/tests/test_workflow.py`, `src/tests/test_research_ablation.py` |
-| Hà Văn Khánh Đạt| ledger + evaluation| `e08e014` | `src/tests/test_member4_crash_policy.py` |
+| Hà Văn Khánh Đạt| ledger + evaluation| `e08e014`, `9756232` | `src/tests/test_member4_crash_policy.py`, `src/tests/test_member4_order_cap.py`, `src/tests/test_member4_reports.py` |
 
 
 
