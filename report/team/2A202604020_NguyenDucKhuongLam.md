@@ -6,6 +6,7 @@
 - MSSV: 2A202604020
 - Email: khuonglam.ai@gmail.com
 - GitHub: RachalHys
+- Nhóm/lớp: AXY — L3B.
 - Vai trò: Workflow và integration.
 
 ## 2. Phần việc phụ trách
@@ -28,7 +29,7 @@ Trong lần rà soát tiếp theo, tôi bổ sung đối chiếu ledger cho test
 
 ### Integration và CP5
 
-Tôi cập nhật các commit của nhóm bằng fast-forward, kiểm tra bản ghép và giữ nguyên code, báo cáo của người phụ trách từng phần. Benchmark được chạy trên cùng 14 claim, năm seed, bảng giá và evaluator; mỗi trial dùng SQLite mới. Một lần chạy độc lập tái lập đúng toàn bộ metric và 280 dòng trial.
+Tôi cập nhật các commit của nhóm, kiểm tra bản ghép và giữ nguyên code, báo cáo của người phụ trách từng phần. Khi hai nhánh cùng thêm benchmark, tôi giải quyết xung đột bằng cách chạy lại lệnh lab để sinh report thống nhất, không sửa JSON bằng tay. Benchmark dùng cùng 14 claim, năm seed, bảng giá và evaluator; mỗi trial có SQLite mới. Một lần chạy độc lập tái lập đúng toàn bộ metric và 280 dòng trial.
 
 Từ số liệu này, [ADR](decision_adr.md) chọn Workflow vì đạt cùng tỷ lệ đúng với Single và Orchestrator nhưng có chi phí thấp nhất. Tôi cũng bổ sung [ablation](research_card.md): chỉ tắt việc Swarm dùng ngày trễ từ ticket, giữ nguyên model và các điều kiện còn lại. Kết quả sửa đúng một trial đã biết mà không tăng số model call. Các số liệu không còn khớp trong báo cáo nhóm được cập nhật theo report mới.
 
@@ -38,13 +39,13 @@ Từ số liệu này, [ADR](decision_adr.md) chọn Workflow vì đạt cùng t
 | --- | --- |
 | Ma trận Workflow của đề | 62/62 test pass, gồm retry T11 và crash/resume T12 |
 | Test Workflow bổ sung | 27/27 pass |
-| Cổng host sau tích hợp và bổ sung ablation | 93 test pass |
+| Cổng host trên bản tích hợp cuối | 114 test pass |
 | Bộ student của nhóm | 272 test pass |
 | Smoke và crash suite | Smoke pass; crash safety 20/20 |
 | Benchmark Workflow | 70/70 trial; pass^5 100%; variance 0; cost/success 27,86 VND mô phỏng |
 | Ablation Swarm | Từ 69/70 lên 70/70 trial; model calls giữ ở 3/trial |
 
-Code và test Workflow được ghi trong commit `4ee050a`; benchmark và ablation trong commit `4db00d5`. Bằng chứng có thể tra tại [benchmark](../../src/reports/benchmark.json), [crash report](../../src/reports/crash.json) và [ablation report](../../src/reports/research_ablation.json). Run id tiêu biểu là `R-workflow-C-001-s11`; trial lỗi đối chứng là `R-swarm-C-002-s55`.
+Code và test Workflow được ghi trong commit `4ee050a`; benchmark và ablation trong commit `4db00d5`. Commit của bản tích hợp cuối được ghi trong [ADR](decision_adr.md). Bằng chứng có thể tra tại [benchmark](../../src/reports/benchmark.json), [crash report](../../src/reports/crash.json) và [ablation report](../../src/reports/research_ablation.json). Run id tiêu biểu là `R-workflow-C-001-s11`; trial lỗi đối chứng là `R-swarm-C-002-s55`.
 
 Các lệnh kiểm tra được chạy trong `src/`: `python -m pytest -q`, `python -m pytest -q -m student -o addopts=`, `python -m lab8.smoke`. Lệnh benchmark và điều kiện đo được ghi trong báo cáo nhóm để chạy lại.
 

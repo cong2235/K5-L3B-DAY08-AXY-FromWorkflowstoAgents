@@ -4,7 +4,7 @@ Tối đa 5 trang ngoài phụ lục. Số liệu lấy từ file trong `src/rep
 
 ## 1. Thông tin nhóm
 
-- Tên nhóm:
+- Tên nhóm: AXY — L3B.
 - Thành viên: xem `TEAM.md`
 - Commit chốt (trùng `report/team/decision_adr.md`): `4db00d5` — code và bằng chứng benchmark/ablation.
 
@@ -54,7 +54,7 @@ Benchmark bộ public: 14 claim × seed `11,22,33,44,55`, MockLLM, SQLite mới 
 - Swarm fail đúng một trial: `R-swarm-C-002-s55` (`status resolved != denied`). Ở seed chia hết cho 5, swarm tin "trễ 5 ngày" trong ticket thay vì `delay_days = 2` trong order, nên trả tiền cho claim đáng lẽ bị từ chối. Ba shape nhóm viết quote từ order row nên không dính.
 - Crash suite: `src/reports/crash.json` → `crash_safety` = **20/20**.
 - Test vai 4 (`src/tests/test_member4_crash_policy.py`, 24 test, xanh) trên cả ba shape: crash tại `before_effect`, `after_effect_before_checkpoint`, `after_checkpoint` rồi resume → đúng 1 dòng ledger, 1 audit `refund_committed`; approval hết hạn (C-007) → `denied`, có `policy_denied`; approval mượn của claim khác → `denied`, ledger trống; trace và `RunResult` không chứa `CANARY_SECRET_*` hay các chuỗi PII cấm của C-001, C-005, C-010.
-- Ma trận student: 272/272 passed (248 test public và 24 test vai 4); cổng host có 93 test pass, gồm 27 test Workflow bổ sung và một test ablation.
+- Ma trận student: 272/272 passed (248 test public và 24 test vai 4); cổng host có 114 test pass sau khi tích hợp cả 21 test Single bổ sung.
 - Tự kiểm `student_drop/`: chưa chạy (chưa nhận thư mục). Lệnh sẽ chạy: `python -m lab8.benchmark --shapes workflow,single,orchestrator --cases student_drop/hidden_claims.jsonl --world student_drop/hidden_world_state.json --out reports/hidden_selfcheck.json`.
 
 Quyết định kiến trúc và lý do: xem `report/team/decision_adr.md`. Phiếu nghiên cứu và ablation: xem `report/team/research_card.md`.
