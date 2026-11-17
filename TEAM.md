@@ -4,8 +4,8 @@
 
 - Tên nhóm: AXY
 - Lớp: L3B
-- Repo nhóm: `K5-L3B-DAY08-AXY-From-Workflows-to-Agents`
-- URL repo, nhánh nộp, commit chốt: [GitHub](https://github.com/cong2235/K5-L3B-DAY08-AXY-From-Workflows-to-Agents), `main`; commit tham chiếu trong [ADR](report/team/decision_adr.md).
+- Repo nhóm: `K5-L3B-DAY08-AXY-FromWorkflowstoAgents`
+- URL repo, nhánh nộp, commit chốt: [GitHub](https://github.com/cong2235/K5-L3B-DAY08-AXY-FromWorkflowstoAgents), `main`; commit tham chiếu trong [ADR](report/team/decision_adr.md).
 
 ## Thành viên
 
