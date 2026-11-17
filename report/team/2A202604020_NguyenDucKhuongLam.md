@@ -6,55 +6,48 @@
 - MSSV: 2A202604020
 - Email: khuonglam.ai@gmail.com
 - GitHub: RachalHys
-- Nhóm/lớp: AXY — L3B.
+- Nhóm/lớp: AXY — L3B
 - Vai trò: Workflow và integration.
 
 ## 2. Phần việc phụ trách
 
-Phần việc chính là triển khai Workflow, kiểm tra tính đúng của luồng hoàn tiền và tích hợp với Single, Orchestrator của các thành viên. Sau khi ba shape được ghép vào `main`, tôi phụ trách chạy benchmark, đối chiếu kết quả, hoàn thiện ADR và bổ sung thí nghiệm ablation cho CP5.
+Tôi phụ trách triển khai Workflow, bổ sung test và tích hợp với Single, Orchestrator của các thành viên. Ở CP5, công việc gồm chạy benchmark, đối chiếu số liệu, hoàn thiện ADR và thực hiện ablation cho research card.
 
 ## 3. Đóng góp cụ thể
 
 ### Workflow và kiểm thử
 
-[Workflow](../../src/lab8/shapes/workflow.py) xử lý claim theo thứ tự cố định: đọc claim, kiểm order và quyền sở hữu, tính quote rồi gọi host khi quote lớn hơn 0. Tiền được tính từ order và policy hiện hành; nội dung ticket không tham gia quyết định số tiền. Workflow không gọi model vì task hiện tại đã có đủ luật xác định bằng code.
+[Workflow](../../src/lab8/shapes/workflow.py) xử lý claim theo thứ tự cố định: đọc claim, kiểm quyền sở hữu đơn, tính quote và chỉ gọi host khi quote lớn hơn 0. Số tiền được tính từ order và policy hiện hành; lời khai trong ticket không thay thế dữ kiện của đơn hàng. Với quy trình có luật rõ ràng này, Workflow không cần gọi model.
 
-Một quyết định quan trọng là truyền quote đầy đủ vào host. Với T14, quyền lợi là 150.000 VND, đơn đã được hoàn 30.000 VND; shape vẫn truyền 150.000 để host chỉ ghi thêm 120.000. Nếu shape tự trừ trước, số tiền sẽ bị trừ hai lần. Các nhánh thiếu thông tin, sai chủ sở hữu, bị từ chối và conflict được trả về đúng contract qua `finish()`.
+Shape truyền quote đầy đủ để host kiểm approval và trừ khoản đã hoàn trước đó. Ví dụ T14 có quyền lợi 150.000 VND, đã hoàn 30.000 VND; host chỉ ghi thêm 120.000 VND. Shape cũng chuyển tiếp yêu cầu giả lập crash và để ngoại lệ truyền ra ngoài, đồng thời ghi trace an toàn.
 
-Workflow truyền `crash_at` xuống host và để crash truyền ra ngoài, đồng thời đóng connection trong `finally`. Trace chỉ ghi dữ kiện cần cho việc kiểm tra, không chứa ticket hay row thô. Trace được lưu trước lời gọi host để vẫn có bằng chứng khi crash xảy ra.
-
-[Test bổ sung](../../src/tests/test_workflow.py) gồm 27 trường hợp: nhánh kết thúc sớm và trace cũ, năm loại approval không hợp lệ, ba cửa sổ crash trên hai claim, conflict khi retry, ticket injection trên năm seed và policy tương lai. Các test được chạy trên stub trước khi triển khai, đều fail vì chức năng chưa có; sau triển khai đều pass.
-
-Trong lần rà soát tiếp theo, tôi bổ sung đối chiếu ledger cho test injection. Trước đó, một biến thể thử nghiệm ghi sai tiền nhưng giữ đúng status và quote vẫn lọt qua nhóm test này. Sau khi siết kiểm tra, test phát hiện đúng lỗi `refund_mismatch`. Năm biến thể sai có chủ đích đều bị test phát hiện; các biến thể chỉ chạy trong bộ nhớ.
+Tôi bổ sung [27 trường hợp kiểm thử](../../src/tests/test_workflow.py) cho các nhánh kết thúc sớm, approval, retry/crash, conflict, ticket injection, policy tương lai và trace cũ. Test đối chiếu kết quả trả về với ledger và audit, giúp phát hiện trường hợp status đúng nhưng tác động hoàn tiền sai.
 
 ### Integration và CP5
 
-Tôi cập nhật các commit của nhóm, kiểm tra bản ghép và giữ nguyên code, báo cáo của người phụ trách từng phần. Khi hai nhánh cùng thêm benchmark, tôi giải quyết xung đột bằng cách chạy lại lệnh lab để sinh report thống nhất, không sửa JSON bằng tay. Benchmark dùng cùng 14 claim, năm seed, bảng giá và evaluator; mỗi trial có SQLite mới. Một lần chạy độc lập tái lập đúng toàn bộ metric và 280 dòng trial.
+Tôi ghép các phần việc của nhóm và kiểm tra lại bản tích hợp. Benchmark sử dụng cùng dữ liệu, seed, bảng giá và evaluator; mỗi trial dùng database SQLite riêng. Kết quả đã được chạy lại độc lập để kiểm tra khả năng tái lập.
 
-Từ số liệu này, [ADR](decision_adr.md) chọn Workflow vì đạt cùng tỷ lệ đúng với Single và Orchestrator nhưng có chi phí thấp nhất. Tôi cũng bổ sung [ablation](research_card.md): chỉ tắt việc Swarm dùng ngày trễ từ ticket, giữ nguyên model và các điều kiện còn lại. Kết quả sửa đúng một trial đã biết mà không tăng số model call. Các số liệu không còn khớp trong báo cáo nhóm được cập nhật theo report mới.
+Từ số liệu đo được, tôi hoàn thiện [ADR](decision_adr.md) chọn Workflow vì đạt cùng tỷ lệ đúng với Single và Orchestrator nhưng có chi phí thấp nhất. Thí nghiệm [ablation](research_card.md) kiểm chứng ảnh hưởng của việc Swarm dùng ngày trễ trong ticket. Tôi cũng đối chiếu và cập nhật các số liệu chưa khớp trong báo cáo nhóm.
 
 ## 4. Bằng chứng và kết quả
 
 | Nội dung | Kết quả |
 | --- | --- |
-| Ma trận Workflow của đề | 62/62 test pass, gồm retry T11 và crash/resume T12 |
-| Test Workflow bổ sung | 27/27 pass |
-| Cổng host trên bản tích hợp cuối | 114 test pass |
-| Bộ student của nhóm | 272 test pass |
-| Smoke và crash suite | Smoke pass; crash safety 20/20 |
-| Benchmark Workflow | 70/70 trial; pass^5 100%; variance 0; cost/success 27,86 VND mô phỏng |
-| Ablation Swarm | Từ 69/70 lên 70/70 trial; model calls giữ ở 3/trial |
+| Workflow | 62 test của đề và 27 test bổ sung đều đạt |
+| Cổng host của bản tích hợp | 114 test đạt |
+| Bộ student của nhóm | 272 test đạt |
+| Smoke và crash suite | Smoke đạt; crash safety 20/20 |
+| Benchmark Workflow | 70/70 trial; chi phí/success 27,86 VND mô phỏng |
+| Ablation Swarm | Từ 69/70 lên 70/70 trial, không tăng số model call |
 
-Code và test Workflow được ghi trong commit `4ee050a`; benchmark và ablation trong commit `4db00d5`. Commit của bản tích hợp cuối được ghi trong [ADR](decision_adr.md). Bằng chứng có thể tra tại [benchmark](../../src/reports/benchmark.json), [crash report](../../src/reports/crash.json) và [ablation report](../../src/reports/research_ablation.json). Run id tiêu biểu là `R-workflow-C-001-s11`; trial lỗi đối chứng là `R-swarm-C-002-s55`.
-
-Các lệnh kiểm tra được chạy trong `src/`: `python -m pytest -q`, `python -m pytest -q -m student -o addopts=`, `python -m lab8.smoke`. Lệnh benchmark và điều kiện đo được ghi trong báo cáo nhóm để chạy lại.
+Commit chính: `4ee050a` cho Workflow và test; `4db00d5` cho benchmark và ablation. Bản tích hợp được ghi trong ADR. Bằng chứng gồm [benchmark](../../src/reports/benchmark.json), [crash report](../../src/reports/crash.json) và [ablation report](../../src/reports/research_ablation.json). Các lệnh tái lập nằm trong [báo cáo nhóm](group_report.md).
 
 ## 5. Công cụ AI đã dùng
 
-Tôi sử dụng Codex để hỗ trợ đọc yêu cầu, triển khai Workflow, viết test, rà diff và soạn báo cáo. Kết quả được kiểm chứng bằng các lệnh kiểm thử, đối chiếu ledger và trace, thử biến thể sai trong bộ nhớ và chạy lại benchmark. Số liệu trong báo cáo lấy từ các lần chạy thực tế, không dùng số do AI tự ước lượng.
+Tôi sử dụng Codex để hỗ trợ đọc yêu cầu, viết code/test và soạn báo cáo. Kết quả được kiểm chứng bằng test, đối chiếu ledger và trace, cùng các lần chạy benchmark thực tế.
 
 ## 6. Tự đánh giá
 
-Phần Workflow và các kiểm tra local đã hoàn thành. Điểm cần chú ý nhất là phân biệt quote với khoản tiền host thực ghi, và phân biệt test trả đúng status với test xác nhận đúng tác động trong ledger. Việc phát hiện khoảng trống ở test injection cho thấy test xanh vẫn cần được rà về chất lượng kiểm chứng.
+Phần Workflow và kiểm tra tích hợp trên dữ liệu public đã hoàn thành. Bài học chính là phân biệt quote với số tiền thực ghi, đồng thời kiểm tra tác động trong ledger thay vì chỉ dựa vào status trả về.
 
-Lựa chọn Workflow phù hợp với task có luật rõ ràng trong bộ public. Kết quả chưa đủ để kết luận về model thật hoặc dữ liệu ngoài tập đã đo. Chưa có dữ liệu `student_drop/` để tự kiểm; kết quả hidden chính thức và các safety count vẫn cần được giảng viên xác nhận.
+Nhóm đã tự kiểm bộ hidden không nhãn, chưa ghi nhận lỗi chạy hoặc dấu hiệu rò rỉ. Do chưa có nhãn và kết quả chấm chính thức, chưa thể kết luận về pass rate hidden hay độ ổn định của model thật.

@@ -1,35 +1,33 @@
 # Decision record
 
 - Shape chọn: workflow
-- Commit hash: 784567c
-- Run id dẫn chứng: `R-workflow-C-001-s11` trong [benchmark](../../src/reports/benchmark.json); trial đối chứng lỗi là `R-swarm-C-002-s55`.
+- Commit hash: 5b97f5b
+- Run id dẫn chứng: `R-workflow-C-001-s11`, xem [benchmark](../../src/reports/benchmark.json).
 - Pass rate / pass^5 / seed min-max / variance: 100% / 100% / 100–100% / 0, trên bộ public 14 claim × 5 seed.
 - Cost per success (mô phỏng, VND): 27,86.
-- Crash safety: 20/20 theo [crash report](../../src/reports/crash.json); Workflow được kiểm riêng ở ba cửa sổ crash, gồm cả trường hợp đơn đã có refund lịch sử.
-- Secret leak / approval bypass: Không phát hiện vi phạm trong các kiểm tra public/local đã chạy; chưa có số đếm hidden chính thức.
+- Crash safety: 20/20 theo [crash report](../../src/reports/crash.json); có test crash riêng cho Workflow.
+- Secret leak / approval bypass: Không phát hiện trong các kiểm tra public/local; chưa có kết quả hidden chính thức.
 
 ## Vì sao shape này
 
-Nhóm chọn Workflow vì quy trình hiện tại có thứ tự rõ ràng: đọc claim, kiểm quyền sở hữu đơn, tính quyền lợi rồi gọi host. Trên cùng 14 claim và các seed `11,22,33,44,55`, Workflow, Single và Orchestrator đều đạt 70/70 trial. Workflow có chi phí cho mỗi lần thành công thấp nhất: 27,86 VND mô phỏng, so với 29,82 của Single và 56,66 của Orchestrator. Workflow không gọi model; số tiền và quyền ghi đều do code kiểm soát.
+Workflow, Single và Orchestrator đều đạt 70/70 trial trên cùng dữ liệu và năm seed. Workflow có chi phí/success thấp nhất: 27,86 VND mô phỏng, so với 29,82 của Single và 56,66 của Orchestrator. Quy trình xét claim có thứ tự và luật rõ ràng nên chưa cần tăng mức tự chủ.
 
-Swarm đạt 69/70 trial và pass^5 là 92,86%. Trial lỗi ở C-002, seed 55 xuất phát từ việc lấy số ngày trong ticket thay cho order. Đây là điểm yếu được starter công bố; kết quả không phải bằng chứng rằng mọi hệ multi-agent đều kém hơn Workflow.
+Swarm đạt 69/70 trial. Lỗi xảy ra khi shape dùng ngày trễ trong ticket thay cho order; nguyên nhân được kiểm chứng trong [research card](research_card.md).
 
 ## Có đáng đổi lấy multi-agent không
 
-Trong phạm vi đã đo, thêm agent chưa cải thiện pass rate của Single hay Orchestrator so với Workflow, trong khi chi phí tăng. Vì vậy nhóm giữ kiến trúc ít tự chủ hơn. Số bước trong report là số event trace; cách ghi event giữa các shape khác nhau nên không dùng metric này để suy ra latency hoặc tốc độ xử lý.
+Trên tập đã đo, Single và Orchestrator chưa cải thiện tỷ lệ đúng so với Workflow, trong khi chi phí cao hơn. Nhóm chọn Workflow để giữ cách xử lý đơn giản và ranh giới trách nhiệm rõ ràng.
 
-Quyết định cần được xem lại nếu dữ liệu mới có claim cần suy luận trên văn bản tự do mà Workflow không xử lý được, hoặc khi một kiến trúc khác tăng tỷ lệ đúng đủ để bù chi phí và độ phức tạp vận hành. Khi đó cần đo lại trên cùng tập dữ liệu, cùng điều kiện, đặc biệt với model thật.
+Cần xem lại quyết định nếu dữ liệu mới có claim cần suy luận văn bản tự do mà Workflow không xử lý được, hoặc khi kiến trúc khác tăng tỷ lệ đúng đủ để bù chi phí. Khi đó phải đo lại trong cùng điều kiện.
 
 ## Trace và bằng chứng
 
-Workflow ghi kết quả tra claim, khả năng truy cập order, quote, yêu cầu refund, kết quả host và quyết định cuối. Trace được ghi trước khi gọi host để vẫn có bằng chứng nếu crash; mọi nhánh trả kết quả bình thường đều dùng `finish()` để lấy effect và audit từ ledger.
+Trace ghi các bước tra claim/order, quote, yêu cầu refund, kết quả host và quyết định cuối. Không ghi ticket, dữ liệu thô, secret, header, SĐT, địa chỉ, ghi chú nội bộ hoặc tên hàng; không có log ngoài phạm vi quét của grader.
 
-Không ghi ticket, claim/order row thô, parent secret, header, SĐT, địa chỉ, ghi chú nội bộ hoặc tên hàng. Workflow không tạo debug log ở vị trí khác và không in dữ liệu ra stdout. Test quét trace, file cùng tiền tố run id, kết quả và đầu ra trong các tình huống đã dựng.
-
-Benchmark và crash report được sinh bằng lệnh của lab, không sửa JSON bằng tay. Một lần chạy benchmark độc lập đã tái lập đúng các biến kiểm soát, toàn bộ metric và 280 dòng trial. Ablation ở [research card](research_card.md) bổ sung bằng chứng cho nguyên nhân lỗi của Swarm.
+[Benchmark](../../src/reports/benchmark.json) và [crash report](../../src/reports/crash.json) được công cụ sinh. Benchmark đã được chạy lại độc lập và cho kết quả khớp dữ liệu lưu trong report. Ngoài suite chung kiểm host và Swarm, test riêng xác nhận Workflow không hoàn trùng khi crash/resume.
 
 ## Giới hạn
 
-Kết luận dựa trên 14 claim public và MockLLM, không đại diện cho độ ổn định của LLM trong sản xuất. Single hiện chọn tool bằng luật cố định; việc so sánh bốn shape chưa tách riêng mọi ảnh hưởng của topology, prompt và số lần gọi model. Chi phí là mô phỏng; latency là `unavailable`.
+Kết luận dựa trên 14 claim public và MockLLM. So sánh hiện tại chưa tách riêng mọi ảnh hưởng của topology, prompt và số lần gọi model. Chi phí là mô phỏng; latency là `unavailable`, không suy ra từ số event trace.
 
-Tự kiểm `student_drop/` (40 claim × 5 seed, 200 trial mỗi shape, `src/reports/hidden_selfcheck.json`): workflow, single và orchestrator đều 0 `error_trials`, 0 `leak_suspect_trials`, trace đúng contract; ba shape cho cùng `status` ở cả 600 trial (95 denied, 90 resolved, 10 escalated, 5 needs_info mỗi shape). Bộ này không có nhãn nên không có pass rate. Chưa có kết quả hidden chính thức từ giảng viên. Do đó chưa khẳng định đạt ngưỡng hidden 0,75 hoặc các safety count của bộ hidden. Nhóm cần cập nhật kết luận nếu đánh giá chính thức cho kết quả khác.
+Tự kiểm [student_drop](../../src/reports/hidden_selfcheck.json) trên 40 claim × 5 seed cho mỗi shape không ghi nhận lỗi chạy hoặc dấu hiệu rò rỉ. Bộ dữ liệu không có nhãn nên chưa thể khẳng định đạt ngưỡng hidden 0,75 và các yêu cầu an toàn chính thức.
