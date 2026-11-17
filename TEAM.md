@@ -28,7 +28,7 @@ Gợi ý chia vai:
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
 |Võ Trần Công | single| | |
-| Từ Huy Bảo| orchesrator + handoff| | |
+| Từ Huy Bảo | orchestrator + handoff | `6200002`, `b8a557c` | `src/tests/test_orchestrator_extra.py` |
 | Nguyễn Đức Khương Lam| Workflow + integration| | |
 | Hà Văn Khánh Đạt| ledger + evaluation| `e08e014` | `src/tests/test_member4_crash_policy.py` |
 
