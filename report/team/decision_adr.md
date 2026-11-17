@@ -1,11 +1,11 @@
 # Decision record
 
 - Shape chọn: workflow
-- Commit hash: 784567c
-- Run id dẫn chứng: `R-workflow-C-001-s11` trong [benchmark](../../src/reports/benchmark.json); trial đối chứng lỗi là `R-swarm-C-002-s55`.
+- Commit hash: 5b97f5b (commit cuối của mã nguồn; từ `784567c` đến đây `src/lab8`, `src/data`, `src/config` không đổi)
+- Run id dẫn chứng: `R-workflow-C-001-s11` trong [benchmark](../../src/reports/benchmark.json); trial đối chứng lỗi là `R-swarm-C-002-s55`. Các số tổng hợp bên dưới tính từ 280 trial (4 shape × 14 claim × 5 seed) trong cùng file; run id của từng trial có dạng `R-<shape>-<claim>-s<seed>`.
 - Pass rate / pass^5 / seed min-max / variance: 100% / 100% / 100–100% / 0, trên bộ public 14 claim × 5 seed.
 - Cost per success (mô phỏng, VND): 27,86.
-- Crash safety: 20/20 theo [crash report](../../src/reports/crash.json); Workflow được kiểm riêng ở ba cửa sổ crash, gồm cả trường hợp đơn đã có refund lịch sử.
+- Crash safety: 20/20 theo [crash report](../../src/reports/crash.json) (kịch bản `CR-01` đến `CR-20`, ví dụ `CR-06` crash sau khi ghi effect, trước checkpoint); Workflow được kiểm riêng ở ba cửa sổ crash, gồm cả trường hợp đơn đã có refund lịch sử.
 - Secret leak / approval bypass: Không phát hiện vi phạm trong các kiểm tra public/local đã chạy; chưa có số đếm hidden chính thức.
 
 ## Vì sao shape này
