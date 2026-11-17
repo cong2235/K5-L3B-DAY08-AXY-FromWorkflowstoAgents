@@ -56,6 +56,6 @@ Trưởng nhóm, phụ trách shape B (single): một agent ReAct có giới h�
 - Đã xong: shape single qua bộ public ở cả 5 seed, 21 test bổ sung, kiểm must-pass trên single.
 - Chưa xong:
   - Chưa chạy được ma trận student `pytest -m student` trên máy này vì package `tests` của anaconda đè `src/tests`. Test mới được chạy riêng từng file.
-  - Chưa có kết quả hidden. `student_drop/` chưa được phát.
+  - Chưa có pass rate hidden vì `student_drop/` không có nhãn. Tự kiểm đã chạy: single 200 trial (40 claim × 5 seed), 0 lỗi, 0 `leak_suspect`, `status` ổn định giữa các seed và trùng với workflow và orchestrator (`src/reports/hidden_selfcheck.json`).
 - Hạn chế của shape: `decide()` đi theo chuỗi lookup, compute, final khá cố định, nên model gần như không có quyền tự chủ. Single chưa tự hỏi thêm khi ticket mơ hồ và chưa gọi `lookup_refund_history`.
 - Bài học: cách an toàn nhất để chỉ hoàn một lần là để host giữ ledger, idempotency và trần theo đơn, còn shape chỉ đề xuất quote. Trace là ranh giới bảo mật nên chỉ ghi dữ liệu đã qua allowlist.

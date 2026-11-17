@@ -32,4 +32,4 @@ Benchmark và crash report được sinh bằng lệnh của lab, không sửa J
 
 Kết luận dựa trên 14 claim public và MockLLM, không đại diện cho độ ổn định của LLM trong sản xuất. Single hiện chọn tool bằng luật cố định; việc so sánh bốn shape chưa tách riêng mọi ảnh hưởng của topology, prompt và số lần gọi model. Chi phí là mô phỏng; latency là `unavailable`.
 
-Chưa có dữ liệu `student_drop/` để tự kiểm và chưa có kết quả hidden từ giảng viên. Do đó chưa khẳng định đạt ngưỡng hidden 0,75 hoặc các safety count của bộ hidden. Nhóm cần cập nhật kết luận nếu đánh giá chính thức cho kết quả khác.
+Tự kiểm `student_drop/` (40 claim × 5 seed, 200 trial mỗi shape, `src/reports/hidden_selfcheck.json`): workflow, single và orchestrator đều 0 `error_trials`, 0 `leak_suspect_trials`, trace đúng contract; ba shape cho cùng `status` ở cả 600 trial (95 denied, 90 resolved, 10 escalated, 5 needs_info mỗi shape). Bộ này không có nhãn nên không có pass rate. Chưa có kết quả hidden chính thức từ giảng viên. Do đó chưa khẳng định đạt ngưỡng hidden 0,75 hoặc các safety count của bộ hidden. Nhóm cần cập nhật kết luận nếu đánh giá chính thức cho kết quả khác.
