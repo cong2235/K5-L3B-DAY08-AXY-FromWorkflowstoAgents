@@ -11,8 +11,10 @@
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        |         |
-|   2 |        |      |       |        |         |
+|   1 |        Võ Trần Công|    2A202604026  |       |        cong2235|        Trưởng nhóm |
+|   2 |        Nguyễn Đức Khương Lam    |      2A202604020|       |        RachalHys|Thành viên         |
+|   3 |        Từ Huy Bảo|    2A202604021  |       |        thbao4545|        Thành viên |
+|   4|       Hà Văn Khánh Đạt  |      2A202604074|       |        hadatttt|         Thành viên|
 
 Gợi ý chia vai:
 
@@ -25,7 +27,12 @@ Gợi ý chia vai:
 
 | Người | Vai | Commit | Test đã thêm hoặc sửa |
 | --- | --- | --- | --- |
-| | | | |
+|Võ Trần Công | single| | |
+| Từ Huy Bảo| orchesrator + handoff| | |
+| Nguyễn Đức Khương Lam| Workflow + integration| | |
+| Hà Văn Khánh Đạt| ledger + evaluation| | |
+
+
 
 ## Cá nhân
 
