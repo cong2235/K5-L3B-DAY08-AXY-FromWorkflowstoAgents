@@ -6,7 +6,7 @@ Tối đa 5 trang ngoài phụ lục. Số liệu lấy từ file trong `src/rep
 
 - Tên nhóm: AXY — L3B.
 - Thành viên: xem `TEAM.md`
-- Commit chốt (trùng `report/team/decision_adr.md`): `4db00d5` — code và bằng chứng benchmark/ablation.
+- Commit chốt (trùng `report/team/decision_adr.md`): `784567c` — bản tích hợp code, test và bằng chứng benchmark/ablation.
 
 ## 2. Mục tiêu và cách tiếp cận
 
@@ -79,6 +79,7 @@ Một lần chạy benchmark độc lập trên SQLite mới đã cho kết qu�
 - **`run_react` chỉ đưa cho `decide` kết quả tool cuối cùng** → giữ trạng thái (order view, quote) trong closure bên ngoài vòng lặp.
 - **Trùng file khi pull:** hai người cùng viết `single.py`; nhóm giữ bản đã commit của người phụ trách shape B, bản còn lại lưu riêng để đối chiếu. Sau khi pull, chạy lại toàn bộ test: vẫn xanh.
 - **Crash suite (`lab8.crash_test`) kiểm host và swarm** → viết thêm test crash 3 điểm × 3 shape để có bằng chứng trực tiếp cho shape nhóm viết.
+- **Một lượt student báo `stale_trace` ở Workflow, C-010, seed 33.** Timestamp các file quanh thời điểm đó lùi khoảng hai giây; chưa xác định nguồn điều chỉnh thời gian. Test riêng và 100 lần lặp claim đều pass; lần chạy lại toàn bộ student đạt 272/272. Giữ nguyên Workflow và thước đo, ghi nhận sự cố thời gian thay vì sửa logic nghiệp vụ khi chưa có bằng chứng lỗi.
 
 ## 6. Tổng hợp đóng góp
 
