@@ -30,7 +30,7 @@ Gợi ý chia vai:
 |Võ Trần Công | single| | |
 | Từ Huy Bảo| orchesrator + handoff| | |
 | Nguyễn Đức Khương Lam| Workflow + integration| | |
-| Hà Văn Khánh Đạt| ledger + evaluation| | `src/tests/test_member4_crash_policy.py` |
+| Hà Văn Khánh Đạt| ledger + evaluation| `e08e014` | `src/tests/test_member4_crash_policy.py` |
 
 
 

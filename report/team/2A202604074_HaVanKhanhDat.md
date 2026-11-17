@@ -18,7 +18,7 @@ Vai 4: ledger/policy/crash + evaluation.
 
 ## 3. Đóng góp cụ thể
 
-- Commit chính: `233fb5e` — test(crash,policy): add member-4 durability and policy tests, crash report, group report
+- Commit chính: `e08e014` — test(crash,policy): add member-4 durability and policy tests, group report
 - Test thêm: `src/tests/test_member4_crash_policy.py` — 24 test, marker `student`:
   - `test_crash_then_resume_pays_exactly_once` (3 shape × 3 điểm crash): crash tại `before_effect`, `after_effect_before_checkpoint`, `after_checkpoint`, resume hai lần → đúng 1 dòng ledger 35.000 VND, 1 audit `refund_committed`.
   - `test_expired_approval_is_denied_by_host`: C-007 (approval hết hạn) → `denied`, `proposal_amount` = quote đầy đủ, có `policy_denied`, ledger trống.
