@@ -4,7 +4,6 @@
 
 - Nhóm: AXY — L3B.
 - Thành viên và đóng góp: [TEAM.md](../../TEAM.md).
-- Commit tham chiếu: `5b97f5b`, trùng với [ADR](decision_adr.md).
 
 ## 2. Mục tiêu và cách tiếp cận
 
@@ -41,7 +40,7 @@ Benchmark dùng 14 claim public, seed `11,22,33,44,55`, cùng MockLLM, bảng gi
 
 Swarm sai một trial ở C-002, seed 55: ticket nói trễ 5 ngày, order ghi 2 ngày. Swarm tin ticket và hoàn tiền cho claim đáng lẽ phải từ chối. Ba shape nhóm viết đều tính quote từ order nên đạt 70/70 trial.
 
-Nhóm chọn Workflow vì đạt cùng tỷ lệ đúng với Single và Orchestrator nhưng có chi phí thấp nhất. Lý do, điều kiện xem lại quyết định và giới hạn được trình bày trong ADR.
+Nhóm chọn Workflow vì đạt cùng tỷ lệ đúng với Single và Orchestrator nhưng có chi phí thấp nhất. Lý do, điều kiện xem lại quyết định và giới hạn được trình bày trong [ADR](decision_adr.md).
 
 Ablation tắt việc Swarm dùng ngày trễ từ ticket đưa kết quả từ 69/70 lên 70/70 trial, không tăng số model call. Chi tiết phương pháp và kết quả nằm trong [research card](research_card.md).
 
@@ -49,8 +48,8 @@ Các kiểm tra trên bản tích hợp:
 
 | Kiểm tra | Kết quả |
 | --- | ---: |
-| Cổng host | 114 test đạt |
-| Bộ student | 272 test đạt: 248 test public và 24 test policy/crash bổ sung |
+| Cổng host, gồm 65 test bonus B5 | 179 test đạt |
+| Bộ student | 282 test đạt |
 | Crash suite | 20/20 |
 
 Ngoài suite chung kiểm host và Swarm, nhóm có test trực tiếp cho ba shape: crash tại ba cửa sổ rồi resume, approval hết hạn hoặc sai claim, và kiểm tra rò rỉ secret, thông tin cá nhân trong trace và kết quả.
@@ -59,12 +58,14 @@ Benchmark đã được chạy lại độc lập và khớp report đã lưu. C
 
 Nhóm đã tự kiểm `student_drop/`: 40 claim × 5 seed cho mỗi shape, không ghi nhận lỗi chạy hoặc dấu hiệu rò rỉ. [Report tự kiểm](../../src/reports/hidden_selfcheck.json) không có nhãn nên chưa tính được pass rate hidden.
 
+Ở bonus B5, nhóm mô phỏng hoàn tiền qua provider riêng và phục hồi sau crash. [Báo cáo bonus](bonus_report.md) trình bày cách đối soát giao dịch của provider với ledger và kết quả kiểm tra.
+
 ## 5. Khó khăn và cách xử lý
 
 - Máy dùng Python 3.14 nằm ngoài khoảng hỗ trợ của lab; thành viên chuyển sang venv Python 3.11 bằng `py -3.11 -m venv .venv`.
 - Vòng ReAct chỉ trả observation cuối cho bước tiếp theo; Single lưu trạng thái cần thiết trong phần điều phối.
 - Crash suite chung chưa kiểm trực tiếp ba shape nhóm viết; nhóm bổ sung test crash riêng cho từng shape.
-- Một lượt `python -m pytest -q -m student -o addopts=` báo `stale_trace`. Test riêng và bộ student chạy lại đều đạt; nguyên nhân chưa xác định. Nhóm giữ nguyên Workflow và thước đo, chưa xem đây là lỗi đã được khắc phục.
+- Một lượt `python -m pytest -q -m student -o addopts=` báo `stale_trace` trên WSL. Bộ test và benchmark chạy lại khớp kết quả đã lưu.
 
 ## 6. Tổng hợp đóng góp
 

@@ -29,18 +29,23 @@ Tôi ghép các phần việc của nhóm và kiểm tra lại bản tích hợp
 
 Từ số liệu đo được, tôi hoàn thiện [ADR](decision_adr.md) chọn Workflow vì đạt cùng tỷ lệ đúng với Single và Orchestrator nhưng có chi phí thấp nhất. Thí nghiệm [ablation](research_card.md) kiểm chứng ảnh hưởng của việc Swarm dùng ngày trễ trong ticket. Tôi cũng đối chiếu và cập nhật các số liệu chưa khớp trong báo cáo nhóm.
 
+### Bonus B5
+
+Ở B5, tôi bổ sung provider giả lập lưu dữ liệu trong SQLite riêng. Luồng hoàn tiền lưu reservation trước khi gọi provider, sau đó confirm qua host. Tôi viết job đối soát và test crash để kiểm tra khoản hoàn ở cả provider lẫn ledger, đồng thời dựng phản ví dụ provider không dedupe. Chi tiết có trong [bộ test B5](../../src/tests/test_bonus_provider.py) và [báo cáo bonus](bonus_report.md).
+
 ## 4. Bằng chứng và kết quả
 
 | Nội dung | Kết quả |
 | --- | --- |
 | Workflow | 62 test của đề và 27 test bổ sung đều đạt |
-| Cổng host của bản tích hợp | 114 test đạt |
-| Bộ student của nhóm | 272 test đạt |
+| Cổng host của bản tích hợp | 179 test đạt, gồm 65 test B5 |
+| Bộ student của nhóm | 282 test đạt |
 | Smoke và crash suite | Smoke đạt; crash safety 20/20 |
 | Benchmark Workflow | 70/70 trial; chi phí/success 27,86 VND mô phỏng |
 | Ablation Swarm | Từ 69/70 lên 70/70 trial, không tăng số model call |
+| Bonus B5 | Provider dedupe đạt 120/120 phiên crash/phục hồi; có phản ví dụ không dedupe |
 
-Commit chính: `4ee050a` cho Workflow và test; `4db00d5` cho benchmark và ablation. Bản tích hợp được ghi trong ADR. Bằng chứng gồm [benchmark](../../src/reports/benchmark.json), [crash report](../../src/reports/crash.json) và [ablation report](../../src/reports/research_ablation.json). Các lệnh tái lập nằm trong [báo cáo nhóm](group_report.md).
+Commit chính: `4ee050a` cho Workflow và test; `4db00d5` cho benchmark và ablation. Kết quả và lệnh tái lập được tổng hợp trong [báo cáo nhóm](group_report.md).
 
 ## 5. Công cụ AI đã dùng
 
@@ -49,5 +54,7 @@ Tôi sử dụng Codex để hỗ trợ đọc yêu cầu, viết code/test và 
 ## 6. Tự đánh giá
 
 Phần Workflow và kiểm tra tích hợp trên dữ liệu public đã hoàn thành. Bài học chính là phân biệt quote với số tiền thực ghi, đồng thời kiểm tra tác động trong ledger thay vì chỉ dựa vào status trả về.
+
+Với provider bên ngoài, tôi cần đối chiếu cả giao dịch đã thực hiện: một dòng ledger chưa chứng minh tiền chỉ được hoàn một lần.
 
 Nhóm đã tự kiểm bộ hidden không nhãn, chưa ghi nhận lỗi chạy hoặc dấu hiệu rò rỉ. Do chưa có nhãn và kết quả chấm chính thức, chưa thể kết luận về pass rate hidden hay độ ổn định của model thật.
