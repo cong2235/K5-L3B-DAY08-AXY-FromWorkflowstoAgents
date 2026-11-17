@@ -5,7 +5,7 @@
 - Run id dẫn chứng: `R-workflow-C-001-s11`, xem [benchmark](../../src/reports/benchmark.json).
 - Pass rate / pass^5 / seed min-max / variance: 100% / 100% / 100–100% / 0, trên bộ public 14 claim × 5 seed.
 - Cost per success (mô phỏng, VND): 27,86.
-- Crash safety: 20/20 theo [crash report](../../src/reports/crash.json); có test crash riêng cho Workflow.
+- Crash safety: 20/20 theo [crash report](../../src/reports/crash.json), kịch bản `CR-01`–`CR-20`; có test crash riêng cho Workflow.
 - Secret leak / approval bypass: Không phát hiện trong các kiểm tra public/local; chưa có kết quả hidden chính thức.
 
 ## Vì sao shape này
@@ -24,7 +24,7 @@ Cần xem lại quyết định nếu dữ liệu mới có claim cần suy lu�
 
 Trace ghi các bước tra claim/order, quote, yêu cầu refund, kết quả host và quyết định cuối. Không ghi ticket, dữ liệu thô, secret, header, SĐT, địa chỉ, ghi chú nội bộ hoặc tên hàng; không có log ngoài phạm vi quét của grader.
 
-[Benchmark](../../src/reports/benchmark.json) và [crash report](../../src/reports/crash.json) được công cụ sinh. Benchmark đã được chạy lại độc lập và cho kết quả khớp dữ liệu lưu trong report. Ngoài suite chung kiểm host và Swarm, test riêng xác nhận Workflow không hoàn trùng khi crash/resume.
+[Benchmark](../../src/reports/benchmark.json) gồm 280 trial, mỗi shape có 70 trial. Benchmark và [crash report](../../src/reports/crash.json) được công cụ sinh. Benchmark đã được chạy lại độc lập và cho kết quả khớp dữ liệu lưu trong report. Ngoài suite chung kiểm host và Swarm, test riêng xác nhận Workflow không hoàn trùng khi crash/resume.
 
 ## Giới hạn
 
