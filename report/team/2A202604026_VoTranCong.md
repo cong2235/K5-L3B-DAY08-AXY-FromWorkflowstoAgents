@@ -18,7 +18,7 @@ Trưởng nhóm, phụ trách shape B (single): một agent ReAct có giới h�
 
 ## 3. Đóng góp cụ thể
 
-- Commit chính: `983d506` — feat(single): implement shape B as a bounded ReAct agent. Commit test: `cf190b0`.
+- Commit chính: `983d506` — feat(single): implement shape B as a bounded ReAct agent. Commit test: `14188e7`.
 - Test thêm: `src/tests/test_single_extra.py` — 21 test:
   - `test_missing_order_id_needs_info_and_writes_nothing` (C-004): `needs_info`, ledger trống.
   - `test_foreign_principal_is_escalated_without_ledger` (C-005): `escalated`, không ghi ledger.
